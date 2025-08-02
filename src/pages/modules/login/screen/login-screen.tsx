@@ -55,7 +55,10 @@ export function LoginScreen() {
         <h2 className="text-center font-bold text-2xl text-purple-700">
           Faça seu login
         </h2>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex w-10 flex-col gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div>
             <label className="text-purple-700" htmlFor="email">
               Email:
