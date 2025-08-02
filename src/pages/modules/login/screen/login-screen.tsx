@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,6 +22,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
 
   const {
     register,
@@ -34,7 +36,7 @@ export function LoginScreen() {
     },
   })
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (_data: LoginFormData) => {
     setIsSubmitting(true)
 
     try {
@@ -42,7 +44,8 @@ export function LoginScreen() {
       // Simular uma chamada de API
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      alert(`Login realizado com sucesso para: ${data.email}`)
+      // Redirecionar para o dashboard após login bem-sucedido
+      navigate('/dashboard')
     } catch {
       alert('Erro interno. Tente novamente.')
     } finally {
