@@ -3,9 +3,12 @@ import { AlertCircle, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/hooks/use-auth'
+import type { AuthResponse } from '../types/auth-type'
 
 const loginSchema = z.object({
   email: z
@@ -23,6 +26,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
+  const { login, token: authToken } = useAuth()
 
   const {
     register,
@@ -38,16 +42,38 @@ export function LoginScreen() {
 
   const onSubmit = async (_data: LoginFormData) => {
     setIsSubmitting(true)
-
     try {
-      // Aqui você faria a chamada para a API de login
-      // Simular uma chamada de API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(_data),
+        }
+      )
 
-      // Redirecionar para o dashboard após login bem-sucedido
+      if (!response.ok) {
+        throw new Error('Login failed')
+      }
+
+      const data: AuthResponse = await response.json()
+
+      login(
+        {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          role: data.role,
+        },
+        data.token
+      )
+
+      toast.success('Login realizado com sucesso!')
       navigate('/dashboard')
     } catch {
-      alert('Erro interno. Tente novamente.')
+      toast.error('Erro interno. Tente novamente.')
     } finally {
       setIsSubmitting(false)
     }
@@ -149,6 +175,25 @@ export function LoginScreen() {
                 Cadastre-se
               </button>
             </p>
+
+            {/* Botão de teste para verificar cookies */}
+            <div className="mt-4">
+              <button
+                className="rounded-md bg-gray-100 px-3 py-1 text-gray-700 text-xs hover:bg-gray-200"
+                onClick={() => {
+                  if (authToken) {
+                    toast.success(
+                      `Token encontrado: ${authToken.substring(0, 20)}...`
+                    )
+                  } else {
+                    toast.error('Nenhum token encontrado no estado')
+                  }
+                }}
+                type="button"
+              >
+                Verificar Token no Estado
+              </button>
+            </div>
           </div>
         </div>
       </div>

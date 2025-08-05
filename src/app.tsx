@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { ProtectedRoute } from '@/components/auth/protected-route'
+import { Toaster } from '@/components/ui/sonner'
 import { AppLayout } from './components/layout/app-layout'
+import { LoginScreen } from './pages/modules/auth/screen/login-screen'
 import { DashboardScreen } from './pages/modules/dashboard/screen/dashboard-screen'
-import { LoginScreen } from './pages/modules/login/screen/login-screen'
 
 export function App() {
   return (
@@ -10,48 +12,55 @@ export function App() {
         <Route element={<LoginScreen />} path="/login" />
         <Route
           element={
-            <AppLayout>
-              <DashboardScreen />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <DashboardScreen />
+              </AppLayout>
+            </ProtectedRoute>
           }
           path="/dashboard"
         />
         <Route
           element={
-            <AppLayout>
-              <div className="flex flex-1 items-center justify-center">
-                <div className="text-center">
-                  <h2 className="font-bold text-2xl text-gray-900">
-                    Propriedades
-                  </h2>
-                  <p className="text-gray-600">
-                    Esta página ainda está em desenvolvimento
-                  </p>
+            <ProtectedRoute>
+              <AppLayout>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="text-center">
+                    <h2 className="font-bold text-2xl text-gray-900">
+                      Propriedades
+                    </h2>
+                    <p className="text-gray-600">
+                      Esta página ainda está em desenvolvimento
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </AppLayout>
+              </AppLayout>
+            </ProtectedRoute>
           }
           path="/properties"
         />
         <Route
           element={
-            <AppLayout>
-              <div className="flex flex-1 items-center justify-center">
-                <div className="text-center">
-                  <h2 className="font-bold text-2xl text-gray-900">
-                    Inquilinos
-                  </h2>
-                  <p className="text-gray-600">
-                    Esta página ainda está em desenvolvimento
-                  </p>
+            <ProtectedRoute>
+              <AppLayout>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="text-center">
+                    <h2 className="font-bold text-2xl text-gray-900">
+                      Inquilinos
+                    </h2>
+                    <p className="text-gray-600">
+                      Esta página ainda está em desenvolvimento
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </AppLayout>
+              </AppLayout>
+            </ProtectedRoute>
           }
           path="/tenants"
         />
         <Route element={<Navigate replace to="/dashboard" />} path="/" />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   )
 }
