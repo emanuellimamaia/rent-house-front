@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 
 interface ProtectedRouteProps {
@@ -11,6 +11,7 @@ export function ProtectedRoute({
   requiredRole,
 }: ProtectedRouteProps) {
   const { isAuthenticated, user, isLoading } = useAuth()
+  const location = useLocation()
 
   // Mostra loading enquanto verifica autenticação
   if (isLoading) {
@@ -24,9 +25,9 @@ export function ProtectedRoute({
     )
   }
 
-  // Redireciona para login se não autenticado
+  // Redireciona para login se não autenticado, salvando a URL atual
   if (!isAuthenticated) {
-    return <Navigate replace to="/login" />
+    return <Navigate replace state={{ from: location }} to="/login" />
   }
 
   // Verifica role se especificada

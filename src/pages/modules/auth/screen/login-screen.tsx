@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAuth } from '@/hooks/use-auth'
-import type { AuthResponse } from '../types/auth-type'
+import { authService } from '../service/auth.service'
 
 const loginSchema = z.object({
   email: z
@@ -26,7 +26,16 @@ type LoginFormData = z.infer<typeof loginSchema>
 export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
-  const { login, token: authToken } = useAuth()
+  const location = useLocation()
+  const { login, token: authToken, isAuthenticated, isLoading } = useAuth()
+
+  // Redireciona se já estiver autenticado
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      const from = location.state?.from?.pathname || '/dashboard'
+      navigate(from, { replace: true })
+    }
+  }, [isAuthenticated, isLoading, navigate, location])
 
   const {
     register,
@@ -40,38 +49,26 @@ export function LoginScreen() {
     },
   })
 
-  const onSubmit = async (_data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true)
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(_data),
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Login failed')
-      }
-
-      const data: AuthResponse = await response.json()
+      const response = await authService.login(data)
 
       login(
         {
-          id: data.id,
-          name: data.name,
-          email: data.email,
-          role: data.role,
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          role: response.role,
         },
-        data.token
+        response.token
       )
 
       toast.success('Login realizado com sucesso!')
-      navigate('/dashboard')
+
+      // Redireciona para a página original ou dashboard
+      const from = location.state?.from?.pathname || '/dashboard'
+      navigate(from, { replace: true })
     } catch {
       toast.error('Erro interno. Tente novamente.')
     } finally {
