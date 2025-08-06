@@ -15,7 +15,6 @@ export function DashboardScreen() {
     error: propertiesError,
   } = useProperties()
 
-  // Loading state
   if (statsLoading) {
     return (
       <div className="space-y-6">
@@ -51,13 +50,11 @@ export function DashboardScreen() {
   }
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="font-bold text-2xl text-gray-900">Dashboard</h2>
         <p className="text-gray-600">Visão geral do seu sistema de aluguel</p>
       </div>
 
-      {/* Cards de estatísticas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card p-4 text-card-foreground shadow-sm">
           <div className="flex items-center justify-between space-y-0 pb-2">
@@ -133,7 +130,6 @@ export function DashboardScreen() {
         </div>
       </div>
 
-      {/* Conteúdo adicional */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
           <h3 className="mb-4 font-semibold text-lg">Propriedades Recentes</h3>

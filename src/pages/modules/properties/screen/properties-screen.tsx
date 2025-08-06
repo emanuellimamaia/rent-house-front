@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -7,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { ModalAddProperty } from '../components/modal-add-property'
 import { usePropertiesOwner } from '../services/properties'
 
 export default function PropertiesScreen() {
   const { data: properties, isLoading, error } = usePropertiesOwner()
+  const [modalOpen, setModalOpen] = useState(false)
 
   if (isLoading) {
     return (
@@ -45,7 +48,9 @@ export default function PropertiesScreen() {
           <h1 className="font-bold text-2xl">Propriedades</h1>
           <p className="text-muted-foreground">Gerencie suas propriedades</p>
         </div>
-        <Button>Adicionar Propriedade</Button>
+        <Button className="" onClick={() => setModalOpen(true)}>
+          Adicionar Propriedade
+        </Button>
       </div>
 
       <div className="rounded-md border">
@@ -85,6 +90,7 @@ export default function PropertiesScreen() {
           </TableBody>
         </Table>
       </div>
+      <ModalAddProperty onOpenChange={setModalOpen} open={modalOpen} />
     </main>
   )
 }
