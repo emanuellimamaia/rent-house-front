@@ -8,6 +8,7 @@ import { queryClient } from './lib/query-client'
 import { LoginScreen } from './pages/modules/auth/screen/login-screen'
 import { DashboardScreen } from './pages/modules/dashboard/screen/dashboard-screen'
 import PropertiesScreen from './pages/modules/properties/screen/properties-screen'
+import TenantScreen from './pages/modules/tenant/screen/tenant-screen'
 
 export function App() {
   return (
@@ -39,16 +40,7 @@ export function App() {
             element={
               <ProtectedRoute>
                 <AppLayout>
-                  <div className="flex flex-1 items-center justify-center">
-                    <div className="text-center">
-                      <h2 className="font-bold text-2xl text-gray-900">
-                        Inquilinos
-                      </h2>
-                      <p className="text-gray-600">
-                        Esta página ainda está em desenvolvimento
-                      </p>
-                    </div>
-                  </div>
+                  <TenantScreen />
                 </AppLayout>
               </ProtectedRoute>
             }
