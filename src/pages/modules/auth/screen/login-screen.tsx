@@ -27,9 +27,8 @@ export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { login, token: authToken, isAuthenticated, isLoading } = useAuth()
+  const { login, isAuthenticated, isLoading } = useAuth()
 
-  // Redireciona se já estiver autenticado
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       const from = location.state?.from?.pathname || '/dashboard'
@@ -172,25 +171,6 @@ export function LoginScreen() {
                 Cadastre-se
               </button>
             </p>
-
-            {/* Botão de teste para verificar cookies */}
-            <div className="mt-4">
-              <button
-                className="rounded-md bg-gray-100 px-3 py-1 text-gray-700 text-xs hover:bg-gray-200"
-                onClick={() => {
-                  if (authToken) {
-                    toast.success(
-                      `Token encontrado: ${authToken.substring(0, 20)}...`
-                    )
-                  } else {
-                    toast.error('Nenhum token encontrado no estado')
-                  }
-                }}
-                type="button"
-              >
-                Verificar Token no Estado
-              </button>
-            </div>
           </div>
         </div>
       </div>

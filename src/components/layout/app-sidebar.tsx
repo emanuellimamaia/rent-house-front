@@ -1,12 +1,4 @@
-import {
-  Building2,
-  Calendar,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  Users,
-} from 'lucide-react'
+import { Building2, Calendar, Home, Settings, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import {
@@ -45,16 +37,16 @@ const items = [
     url: '/contracts',
     icon: Calendar,
   },
-  {
-    title: 'Relatórios',
-    url: '/reports',
-    icon: Inbox,
-  },
-  {
-    title: 'Pesquisar',
-    url: '/search',
-    icon: Search,
-  },
+  // {
+  //   title: 'Relatórios',
+  //   url: '/reports',
+  //   icon: Inbox,
+  // },
+  // {
+  //   title: 'Pesquisar',
+  //   url: '/search',
+  //   icon: Search,
+  // },
 ]
 
 const settingsItems = [

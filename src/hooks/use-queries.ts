@@ -69,23 +69,6 @@ export const useProperty = (id: string) => {
   })
 }
 
-// Hook para buscar todos os inquilinos
-export const useTenants = () => {
-  return useQuery({
-    queryKey: queryKeys.tenants,
-    queryFn: () => apiClient.get<Tenant[]>('/tenants'),
-  })
-}
-
-// Hook para buscar um inquilino específico
-export const useTenant = (id: string) => {
-  return useQuery({
-    queryKey: queryKeys.tenant(id),
-    queryFn: () => apiClient.get<Tenant>(`/tenants/${id}`),
-    enabled: !!id,
-  })
-}
-
 // Mutation para criar uma nova propriedade
 export const useCreateProperty = () => {
   const queryClient = useQueryClient()
