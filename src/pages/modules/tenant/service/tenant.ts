@@ -28,7 +28,7 @@ export const useTenants = () => {
 export const useCreateTenant = () => {
   return useMutation({
     mutationFn: (data: CreateTenat) =>
-      apiClient.post<Tenant>('/users-owner', data),
+      apiClient.post<Tenant>('/create-tenant-user', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tenants'] })
     },
