@@ -17,11 +17,16 @@ import {
 } from '@/components/ui/table'
 import { useAuthStore } from '@/stores/auth-store'
 import { ModalAddTenant } from '../components/modal-add-tenant'
-import { useTenants } from '../service/tenant'
+import { ModalEditTenant } from '../components/modal-edit-tenant'
+import { type Tenant, useTenants } from '../service/tenant'
 
 export default function TenantScreen() {
   const [modalOpen, setModalOpen] = useState<{
     ownerId?: string
+    open: boolean
+  }>({ open: false })
+  const [modalEditTenant, setModalEditTenant] = useState<{
+    tenant?: Tenant
     open: boolean
   }>({ open: false })
   const { data: tenants, isLoading, error } = useTenants()
@@ -85,8 +90,13 @@ export default function TenantScreen() {
                       <MoreHorizontal className="h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>Editar</DropdownMenuItem>
-                      <DropdownMenuItem>Deletar</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          setModalEditTenant({ tenant, open: true })
+                        }
+                      >
+                        Editar
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -95,6 +105,13 @@ export default function TenantScreen() {
           </TableBody>
         </Table>
       </div>
+      {modalEditTenant.tenant && (
+        <ModalEditTenant
+          onOpenChange={(open) => setModalEditTenant({ open })}
+          open={modalEditTenant.open}
+          tenant={modalEditTenant.tenant}
+        />
+      )}
       {modalOpen.ownerId && (
         <ModalAddTenant
           onOpenChange={(open) => setModalOpen({ open })}

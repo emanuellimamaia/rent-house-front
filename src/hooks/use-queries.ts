@@ -13,18 +13,6 @@ export interface Property {
   updatedAt: string
 }
 
-export interface Tenant {
-  id: string
-  name: string
-  email: string
-  phone: string
-  propertyId?: string
-  rentStartDate?: string
-  rentEndDate?: string
-  createdAt: string
-  updatedAt: string
-}
-
 export interface DashboardStats {
   totalProperties: number
   rentedProperties: number
@@ -115,52 +103,6 @@ export const useDeleteProperty = () => {
       queryClient.removeQueries({ queryKey: queryKeys.property(deletedId) })
       // Invalida a lista
       queryClient.invalidateQueries({ queryKey: queryKeys.properties })
-      queryClient.invalidateQueries({ queryKey: queryKeys.dashboardStats })
-    },
-  })
-}
-
-// Mutation para criar um novo inquilino
-export const useCreateTenant = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (data: Omit<Tenant, 'id' | 'createdAt' | 'updatedAt'>) =>
-      apiClient.post<Tenant>('/tenants', data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.tenants })
-      queryClient.invalidateQueries({ queryKey: queryKeys.dashboardStats })
-    },
-  })
-}
-
-// Mutation para atualizar um inquilino
-export const useUpdateTenant = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Tenant> }) =>
-      apiClient.put<Tenant>(`/tenants/${id}`, data),
-    onSuccess: (updatedTenant) => {
-      queryClient.setQueryData(
-        queryKeys.tenant(updatedTenant.id),
-        updatedTenant
-      )
-      queryClient.invalidateQueries({ queryKey: queryKeys.tenants })
-      queryClient.invalidateQueries({ queryKey: queryKeys.dashboardStats })
-    },
-  })
-}
-
-// Mutation para deletar um inquilino
-export const useDeleteTenant = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (id: string) => apiClient.delete(`/tenants/${id}`),
-    onSuccess: (_, deletedId) => {
-      queryClient.removeQueries({ queryKey: queryKeys.tenant(deletedId) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.tenants })
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboardStats })
     },
   })

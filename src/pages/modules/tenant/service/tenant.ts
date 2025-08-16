@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api-client'
 import { queryClient } from '@/lib/query-client'
 
-interface Tenant {
+export interface Tenant {
   id: string
   name: string
   email: string
@@ -17,6 +17,13 @@ interface CreateTenat {
   password: string
   ownerId: string
 }
+
+interface UpdateTenant {
+  id: string
+  name: string
+  email: string
+  phoneNumber: string
+}
 export const useTenants = () => {
   return useQuery({
     queryKey: ['tenants'],
@@ -29,6 +36,16 @@ export const useCreateTenant = () => {
   return useMutation({
     mutationFn: (data: CreateTenat) =>
       apiClient.post<Tenant>('/create-tenant-user', data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tenants'] })
+    },
+  })
+}
+
+export const useUpdateTenant = () => {
+  return useMutation({
+    mutationFn: (data: UpdateTenant) =>
+      apiClient.patch<Tenant>(`/users/${data.id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tenants'] })
     },
