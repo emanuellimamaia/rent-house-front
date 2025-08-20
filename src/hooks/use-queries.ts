@@ -13,15 +13,6 @@ export interface Property {
   updatedAt: string
 }
 
-export interface DashboardStats {
-  totalProperties: number
-  rentedProperties: number
-  availableProperties: number
-  totalTenants: number
-  monthlyRevenue: number
-  occupancyRate: number
-}
-
 // Query Keys - importante para cache management
 export const queryKeys = {
   properties: ['properties'] as const,
@@ -29,15 +20,6 @@ export const queryKeys = {
   tenants: ['tenants'] as const,
   tenant: (id: string) => ['tenants', id] as const,
   dashboardStats: ['dashboard', 'stats'] as const,
-}
-
-// Hook para buscar estatísticas do dashboard
-export const useDashboardStats = () => {
-  return useQuery({
-    queryKey: queryKeys.dashboardStats,
-    queryFn: () => apiClient.get<DashboardStats>('/dashboard/stats'),
-    staleTime: 2 * 60 * 1000, // 2 minutos
-  })
 }
 
 // Hook para buscar todas as propriedades
