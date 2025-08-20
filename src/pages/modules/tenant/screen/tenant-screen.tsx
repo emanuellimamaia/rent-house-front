@@ -59,7 +59,7 @@ export default function TenantScreen() {
   return (
     <main className="p-6">
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="mb-6 flex flex-col gap-4 md:items-center md:justify-between">
           <h1 className="font-bold text-2xl">Tela de Inquilinos</h1>
           <p className="text-muted-foreground">Gerencie os inquilinos aqui</p>
         </div>

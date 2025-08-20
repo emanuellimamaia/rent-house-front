@@ -33,8 +33,8 @@ const items = [
     icon: Users,
   },
   {
-    title: 'Contratos',
-    url: '/contracts',
+    title: 'Aluguéis',
+    url: '/rentals',
     icon: Calendar,
   },
   // {

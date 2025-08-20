@@ -18,8 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useCreateRental } from '../../rentals/service/rentals'
 import { useTenants } from '../../tenant/service/tenant'
-import { useCreateRental } from '../services/rentals'
 
 const createRentalSchema = z.object({
   startDate: z.string().min(1, 'Data de início é obrigatória'),

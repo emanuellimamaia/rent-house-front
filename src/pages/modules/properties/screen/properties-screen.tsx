@@ -141,6 +141,7 @@ export default function PropertiesScreen() {
                           <Pencil /> Editar
                         </DropdownMenuItem>
                         <DropdownMenuItem
+                          disabled={property.rented}
                           onClick={() => handleRentProperty(property)}
                         >
                           <House /> Alugar

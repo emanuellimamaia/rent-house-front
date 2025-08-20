@@ -13,7 +13,6 @@ export function ProtectedRoute({
   const { isAuthenticated, user, isLoading } = useAuth()
   const location = useLocation()
 
-  // Mostra loading enquanto verifica autenticação
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -25,12 +24,10 @@ export function ProtectedRoute({
     )
   }
 
-  // Redireciona para login se não autenticado, salvando a URL atual
   if (!isAuthenticated) {
     return <Navigate replace state={{ from: location }} to="/login" />
   }
 
-  // Verifica role se especificada
   if (requiredRole && user?.role !== requiredRole) {
     return (
       <div className="flex min-h-screen items-center justify-center">

@@ -1,13 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { apiClient } from '@/lib/api-client'
+import { queryClient } from '@/lib/query-client'
 
-interface Rental {
+export interface Rental {
   id: string
   propertyId: string
   startDate: string
+  endDate?: string
   dueDay: number
-  createdAt: string
-  updatedAt: string
+  created_at: string
+  updated_at: string
 }
 
 interface CreateRentalData {
@@ -17,16 +19,21 @@ interface CreateRentalData {
   tenantId: string
 }
 
-interface UpdateRentalData {
-  startDate: string
-  dueDay: number
-}
-
 export const useRentals = () => {
   return useQuery({
     queryKey: ['rentals'],
     queryFn: () => apiClient.get<Rental[]>('/rentals'),
     staleTime: 2 * 60 * 1000,
+  })
+}
+
+export const useFinishRental = () => {
+  return useMutation({
+    mutationFn: ({ rentalId, endDate }: { rentalId: string; endDate: Date }) =>
+      apiClient.patch(`/rentals/${rentalId}/end`, { endDate }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['rentals'] })
+    },
   })
 }
 
@@ -40,35 +47,9 @@ export const useRentalsByProperty = (propertyId: string) => {
 }
 
 export const useCreateRental = () => {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (data: CreateRentalData) =>
       apiClient.post<Rental>('/rentals', data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rentals'] })
-      queryClient.invalidateQueries({ queryKey: ['properties'] })
-    },
-  })
-}
-
-export const useUpdateRental = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateRentalData }) =>
-      apiClient.put<Rental>(`/rentals/${id}`, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['rentals'] })
-    },
-  })
-}
-
-export const useDeleteRental = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (id: string) => apiClient.delete(`/rentals/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rentals'] })
       queryClient.invalidateQueries({ queryKey: ['properties'] })

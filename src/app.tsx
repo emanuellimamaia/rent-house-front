@@ -8,6 +8,7 @@ import { queryClient } from './lib/query-client'
 import { LoginScreen } from './pages/modules/auth/screen/login-screen'
 import { DashboardScreen } from './pages/modules/dashboard/screen/dashboard-screen'
 import PropertiesScreen from './pages/modules/properties/screen/properties-screen'
+import RentalsScreen from './pages/modules/rentals/screen/rentals-screen'
 import TenantScreen from './pages/modules/tenant/screen/tenant-screen'
 
 export function App() {
@@ -45,6 +46,16 @@ export function App() {
               </ProtectedRoute>
             }
             path="/tenants"
+          />
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <RentalsScreen />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+            path="/rentals"
           />
           <Route element={<Navigate replace to="/dashboard" />} path="/" />
         </Routes>
