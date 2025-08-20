@@ -1,4 +1,4 @@
-import { MoreHorizontal } from 'lucide-react'
+import { House, MoreHorizontal, Pencil } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +18,7 @@ import {
 import { ModalAddProperty } from '../components/modal-add-property'
 import { ModalDeleteProperty } from '../components/modal-delete-property'
 import { ModalEditProperty } from '../components/modal-edit-property'
+import { ModalRentalProperty } from '../components/modal-rent-property'
 import { usePropertiesOwner } from '../services/properties'
 
 interface Property {
@@ -35,16 +36,20 @@ export default function PropertiesScreen() {
   const [selectedProperty, setSelectedProperty] = useState<
     Property | undefined
   >(undefined)
-
+  const [rentalModalOpen, setRentalModalOpen] = useState(false)
   const handleEditProperty = (property: Property) => {
     setSelectedProperty(property)
     setEditModalOpen(true)
   }
-
-  const handleDeleteProperty = (property: Property) => {
+  const handleRentProperty = (property: Property) => {
     setSelectedProperty(property)
-    setDeleteModalOpen(true)
+    setRentalModalOpen(true)
   }
+
+  // const handleDeleteProperty = (property: Property) => {
+  //   setSelectedProperty(property)
+  //   setDeleteModalOpen(true)
+  // }
 
   if (isLoading) {
     return (
@@ -125,15 +130,20 @@ export default function PropertiesScreen() {
                         <MoreHorizontal className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem
+                        {/* <DropdownMenuItem
                           onClick={() => handleDeleteProperty(property)}
                         >
                           Deletar
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                         <DropdownMenuItem
                           onClick={() => handleEditProperty(property)}
                         >
-                          Editar
+                          <Pencil /> Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleRentProperty(property)}
+                        >
+                          <House /> Alugar
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -163,6 +173,11 @@ export default function PropertiesScreen() {
         onOpenChange={setDeleteModalOpen}
         open={deleteModalOpen}
         property={selectedProperty}
+      />
+      <ModalRentalProperty
+        onOpenChange={setRentalModalOpen}
+        open={rentalModalOpen}
+        propertyId={selectedProperty?.id}
       />
     </main>
   )
