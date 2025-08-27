@@ -1,16 +1,14 @@
+import { useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
-
-let isInitialized = false
 
 export const useAuth = () => {
   const { user, token, isAuthenticated, isLoading, login, logout, initialize } =
     useAuthStore()
 
-  // Inicializa apenas uma vez
-  if (!isInitialized) {
+  // Inicializa apenas uma vez quando o hook é usado
+  useEffect(() => {
     initialize()
-    isInitialized = true
-  }
+  }, [initialize])
 
   return {
     // Estado

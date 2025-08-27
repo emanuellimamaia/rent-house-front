@@ -21,14 +21,6 @@ export const authService = {
     return apiClient.post<AuthResponse>('/auth/register', data)
   },
 
-  // validateToken: (): Promise<{ valid: boolean }> => {
-  //   return apiClient.get<{ valid: boolean }>('/auth/validate')
-  // },
-
-  // refreshToken: (): Promise<AuthResponse> => {
-  //   return apiClient.post<AuthResponse>('/auth/refresh')
-  // },
-
   logout: (): Promise<void> => {
     return apiClient.post<void>('/auth/logout')
   },

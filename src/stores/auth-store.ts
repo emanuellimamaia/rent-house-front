@@ -13,6 +13,7 @@ export interface AuthState {
   token: string | null
   isAuthenticated: boolean
   isLoading: boolean
+  isInitialized: boolean
 
   // Actions
   login: (user: User, token: string) => void
@@ -21,11 +22,12 @@ export interface AuthState {
   setLoading: (loading: boolean) => void
 }
 
-export const useAuthStore = create<AuthState>()((set) => ({
+export const useAuthStore = create<AuthState>()((set, get) => ({
   user: null,
   token: null,
   isAuthenticated: false,
   isLoading: true,
+  isInitialized: false,
 
   login: (user: User, token: string) => {
     // Salva o token no cookie
@@ -41,6 +43,7 @@ export const useAuthStore = create<AuthState>()((set) => ({
       token,
       isAuthenticated: true,
       isLoading: false,
+      isInitialized: true,
     })
   },
 
@@ -58,10 +61,18 @@ export const useAuthStore = create<AuthState>()((set) => ({
       token: null,
       isAuthenticated: false,
       isLoading: false,
+      isInitialized: true,
     })
   },
 
   initialize: () => {
+    const { isInitialized } = get()
+
+    // Só inicializa se ainda não foi inicializado
+    if (isInitialized) {
+      return
+    }
+
     // Verifica se existe token nos cookies
     const token = Cookies.get('token')
     const userId = Cookies.get('userId')
@@ -69,6 +80,7 @@ export const useAuthStore = create<AuthState>()((set) => ({
     const userName = Cookies.get('userName')
     const userEmail = Cookies.get('userEmail')
 
+    // Verifica se todos os dados necessários estão presentes
     if (token && userId && userName && userEmail) {
       // Reconstrói o estado a partir dos cookies
       const user: User = {
@@ -83,13 +95,22 @@ export const useAuthStore = create<AuthState>()((set) => ({
         token,
         isAuthenticated: true,
         isLoading: false,
+        isInitialized: true,
       })
     } else {
+      // Se algum dado está faltando, limpa tudo para garantir consistência
+      Cookies.remove('token')
+      Cookies.remove('userId')
+      Cookies.remove('userRole')
+      Cookies.remove('userName')
+      Cookies.remove('userEmail')
+
       set({
         user: null,
         token: null,
         isAuthenticated: false,
         isLoading: false,
+        isInitialized: true,
       })
     }
   },

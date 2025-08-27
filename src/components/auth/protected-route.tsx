@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
+import { useTokenValidation } from '@/hooks/use-token-validation'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -10,9 +11,11 @@ export function ProtectedRoute({
   children,
   requiredRole,
 }: ProtectedRouteProps) {
-  const { isAuthenticated, user, isLoading } = useAuth()
+  const { user, isLoading } = useAuth()
+  const { isValidToken } = useTokenValidation()
   const location = useLocation()
 
+  // Mostra loading enquanto verifica autenticação
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -24,10 +27,12 @@ export function ProtectedRoute({
     )
   }
 
-  if (!isAuthenticated) {
+  // Se não tem token ou não está autenticado, redireciona para login
+  if (!isValidToken) {
     return <Navigate replace state={{ from: location }} to="/login" />
   }
 
+  // Verifica permissões de role se especificado
   if (requiredRole && user?.role !== requiredRole) {
     return (
       <div className="flex min-h-screen items-center justify-center">
