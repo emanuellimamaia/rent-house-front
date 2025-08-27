@@ -11,4 +11,21 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Configuração para SPA - todas as rotas redirecionam para index.html
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@tanstack/react-query'],
+        },
+      },
+    },
+  },
+  // Preview mode para testar localmente como será em produção
+  preview: {
+    port: 4173,
+    strictPort: true,
+  },
 })

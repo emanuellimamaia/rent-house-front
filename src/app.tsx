@@ -80,6 +80,27 @@ export function App() {
             path="/rentals"
           />
           <Route element={<ProtectedDashboardRedirect />} path="/" />
+          {/* Catch-all route para URLs não encontradas */}
+          <Route 
+            element={
+              <div className="flex min-h-screen items-center justify-center">
+                <div className="text-center">
+                  <h1 className="font-bold text-2xl text-gray-800">Página não encontrada</h1>
+                  <p className="mt-2 text-gray-600">A página que você está procurando não existe.</p>
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      window.location.href = '/'
+                    }}
+                    className="mt-4 rounded bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
+                  >
+                    Voltar ao início
+                  </button>
+                </div>
+              </div>
+            } 
+            path="*" 
+          />
         </Routes>
         <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />

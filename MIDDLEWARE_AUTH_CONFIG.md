@@ -91,3 +91,35 @@ Todas essas rotas redirecionam para `/login` se o usuário não estiver autentic
 ## ⚡ Configuração Finalizada
 
 O middleware está 100% configurado e operacional. Todas as proteções estão ativas e funcionando corretamente sem necessidade de endpoints de validação no backend.
+
+## 🛠️ Configuração para Produção (SPA Routing)
+
+Para resolver o problema de 404 em produção ao acessar URLs diretamente:
+
+### **Netlify**
+- Arquivo `public/_redirects` já configurado
+- Redireciona todas as rotas para `index.html`
+
+### **Vercel** 
+- Arquivo `vercel.json` já configurado
+- Reescreve todas as rotas para `index.html`
+
+### **Apache**
+- Arquivo `public/.htaccess` já configurado
+- Usa mod_rewrite para SPA routing
+
+### **Nginx**
+- Arquivo `nginx.conf` com configuração de exemplo
+- Use `try_files $uri $uri/ /index.html;`
+
+### **Outros servidores**
+- Configure para servir `index.html` para todas as rotas não encontradas
+- Essencial para SPAs (Single Page Applications) funcionarem em produção
+
+## 🚀 Deploy Checklist
+
+1. ✅ Build o projeto: `npm run build`
+2. ✅ Teste localmente: `npm run preview`
+3. ✅ Configure servidor web para SPA routing
+4. ✅ Adicione arquivo de configuração apropriado (_redirects, vercel.json, .htaccess, etc.)
+5. ✅ Teste URLs diretas em produção
